@@ -1,6 +1,7 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Search, MapPin, Home, Building2, Trees, Building } from 'lucide-react';
 import { Navbar } from '@/components/ui/Navbar';
@@ -84,10 +85,12 @@ export default function LandingPage() {
           bottom: 0,
           zIndex: -1
         }}>
-          <img 
+          <Image 
             src="/hero.png" 
             alt="Luxury Villa" 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            fill
+            priority
+            style={{ objectFit: 'cover' }} 
           />
           <div style={{
             position: 'absolute',
@@ -122,14 +125,13 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="glass"
+            className="glass hero-search-container"
             style={{
               maxWidth: '900px',
               margin: '0 auto',
               padding: '1.5rem',
               borderRadius: 'var(--border-radius)',
               display: 'grid',
-              gridTemplateColumns: '2fr 1fr 1fr 1fr',
               gap: '1rem',
               alignItems: 'center'
             }}

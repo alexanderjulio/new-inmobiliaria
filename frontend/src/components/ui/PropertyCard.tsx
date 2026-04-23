@@ -2,11 +2,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Bed, Bath, Maximize } from 'lucide-react';
+import { MapPin, Bed, Bath, Maximize, Heart } from 'lucide-react';
 import Link from 'next/link';
+import { propertyApi } from '@/lib/api';
+import Image from 'next/image';
 
 interface PropertyCardProps {
-  id: string; // Add ID to props
+  id: string;
   image: string;
   title: string;
   price: string;
@@ -15,6 +17,7 @@ interface PropertyCardProps {
   baths: number;
   sqft: number;
   type: string;
+  isInitialFavorite?: boolean;
 }
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({
@@ -26,8 +29,26 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   beds,
   baths,
   sqft,
-  type
+  type,
+  isInitialFavorite = false
 }) => {
+  const [isFavorite, setIsFavorite] = React.useState(isInitialFavorite);
+
+  const handleFavorite = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await propertyApi.toggleFavorite(id);
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error("Error toggling favorite", error);
+      // Redirect to login if unauthorized
+      if ((error as any).response?.status === 401) {
+        window.location.href = '/login';
+      }
+    }
+  };
+
   return (
     <Link href={`/properties/${id}`}>
       <motion.div 
@@ -46,12 +67,12 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
       }}
     >
       <div style={{ position: 'relative', height: '240px', overflow: 'hidden' }}>
-        <img 
+        <Image 
           src={image} 
           alt={title} 
-          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} 
-          onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          style={{ objectFit: 'cover', transition: 'transform 0.5s ease' }} 
         />
         <div style={{ 
           position: 'absolute', 
@@ -67,6 +88,27 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         }}>
           {type}
         </div>
+        <button 
+          onClick={handleFavorite}
+          style={{ 
+            position: 'absolute', 
+            top: '1rem', 
+            right: '1rem', 
+            background: 'rgba(255,255,255,0.2)', 
+            backdropFilter: 'blur(4px)',
+            border: 'none',
+            color: isFavorite ? '#ef4444' : 'white', 
+            padding: '0.5rem', 
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          <Heart size={20} fill={isFavorite ? '#ef4444' : 'none'} />
+        </button>
       </div>
       
       <div style={{ padding: '1.5rem' }}>

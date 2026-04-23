@@ -21,6 +21,8 @@ export const propertyApi = {
   getAll: (params?: any) => api.get('/properties', { params }),
   getOne: (id: string) => api.get(`/properties/${id}`),
   create: (data: any) => api.post('/properties', data),
+  toggleFavorite: (id: string) => api.post(`/favorites/${id}`),
+  getFavorites: () => api.get('/favorites'),
 };
 
 export const authApi = {

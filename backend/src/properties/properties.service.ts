@@ -13,17 +13,20 @@ export class PropertiesService {
   }
 
   async findAll(filters: any) {
-    const { city, type, status, minPrice, maxPrice } = filters;
+    const { city, type, status, minPrice, maxPrice, bedrooms, bathrooms, minArea } = filters;
     
     return this.prisma.property.findMany({
       where: {
-        city: city ? { name: city } : undefined,
+        city: city ? { name: { contains: city, mode: 'insensitive' } } : undefined,
         type: type || undefined,
         status: status || undefined,
         price: {
           gte: minPrice ? new Prisma.Decimal(minPrice) : undefined,
           lte: maxPrice ? new Prisma.Decimal(maxPrice) : undefined,
         },
+        bedrooms: bedrooms ? { gte: parseInt(bedrooms) } : undefined,
+        bathrooms: bathrooms ? { gte: parseInt(bathrooms) } : undefined,
+        area: minArea ? { gte: parseFloat(minArea) } : undefined,
       },
       include: {
         city: true,

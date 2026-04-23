@@ -43,6 +43,7 @@ model User {
   avatar        String?
   properties    Property[]
   projects      Project[] // If they are a constructor
+  favorites     Favorite[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -113,6 +114,18 @@ model Property {
   tour3dUrl     String?
   
   featured      Boolean        @default(false)
+  favorites     Favorite[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+}
+
+model Favorite {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  property    Property @relation(fields: [propertyId], references: [id])
+  propertyId  String
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, propertyId])
 }
