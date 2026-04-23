@@ -18,7 +18,7 @@ export class PropertiesController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() body: any, @Request() req) {
+  async create(@Body() body: any, @Request() req: any) {
     return this.propertiesService.create({
       ...body,
       owner: { connect: { id: req.user.id } },

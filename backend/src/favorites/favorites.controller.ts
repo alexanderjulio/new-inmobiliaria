@@ -8,13 +8,13 @@ export class FavoritesController {
 
   @UseGuards(JwtAuthGuard)
   @Post(':propertyId')
-  async toggle(@Param('propertyId') propertyId: string, @Request() req) {
+  async toggle(@Param('propertyId') propertyId: string, @Request() req: any) {
     return this.favoritesService.toggleFavorite(req.user.id, propertyId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@Request() req) {
+  async findAll(@Request() req: any) {
     return this.favoritesService.getFavorites(req.user.id);
   }
 }

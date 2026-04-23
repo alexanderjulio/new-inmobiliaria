@@ -167,23 +167,3 @@ export const Navbar = () => {
     </>
   );
 };
-
-        {/* Mobile Toggle */}
-        <div style={{ display: 'none' }} className="mobile-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X /> : <Menu />}
-        </div>
-      </div>
-
-      <style jsx>{`
-        @media (max-width: 768px) {
-          .desktop-menu {
-            display: none !important;
-          }
-          .mobile-toggle {
-            display: block !important;
-          }
-        }
-      `}</style>
-    </nav>
-  );
-};
