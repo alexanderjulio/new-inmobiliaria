@@ -28,6 +28,7 @@ export default function LandingPage() {
 
   const featuredProperties = [
     {
+      id: "1",
       image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop",
       title: "Villa Contemporánea en La Calera",
       price: "$2.400.000.000",
@@ -38,6 +39,7 @@ export default function LandingPage() {
       type: "Venta"
     },
     {
+      id: "2",
       image: "https://images.unsplash.com/photo-1600607687940-4e524cb35a36?q=80&w=2070&auto=format&fit=crop",
       title: "Penthouse de Lujo en El Poblado",
       price: "$12.000.000 / mes",
@@ -48,6 +50,7 @@ export default function LandingPage() {
       type: "Arriendo"
     },
     {
+      id: "3",
       image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
       title: "Residencia Moderna en Chía",
       price: "$1.850.000.000",

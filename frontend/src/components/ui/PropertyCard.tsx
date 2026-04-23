@@ -3,8 +3,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Bed, Bath, Maximize } from 'lucide-react';
+import Link from 'next/link';
 
 interface PropertyCardProps {
+  id: string; // Add ID to props
   image: string;
   title: string;
   price: string;
@@ -16,6 +18,7 @@ interface PropertyCardProps {
 }
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({
+  id,
   image,
   title,
   price,
@@ -26,8 +29,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   type
 }) => {
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
+    <Link href={`/properties/${id}`}>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       className="property-card"
@@ -100,5 +104,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
       </div>
     </motion.div>
+    </Link>
   );
 };

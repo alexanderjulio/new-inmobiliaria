@@ -77,6 +77,7 @@ export default function SearchPage() {
               {properties.map((prop: any, i) => (
                 <PropertyCard 
                   key={prop.id} 
+                  id={prop.id}
                   image={prop.mainImage}
                   title={prop.title}
                   price={new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(prop.price)}
