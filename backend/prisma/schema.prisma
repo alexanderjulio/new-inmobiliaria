@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  SELLER
+  CONSTRUCTOR
+  ADMIN
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  STUDIO
+  LOT
+  COUNTRY_HOUSE
+  OFFICE
+  COMMERCIAL
+}
+
+enum PropertyStatus {
+  SALE
+  RENT
+  PROJECT // For properties still in construction
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String
+  role          Role      @default(BUYER)
+  phone         String?
+  avatar        String?
+  properties    Property[]
+  projects      Project[] // If they are a constructor
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model City {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  country     String     @default("Colombia")
+  properties  Property[]
+  projects    Project[]
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String     @unique // e.g. "Lujo", "Económico", "Campestre"
+  properties  Property[]
+}
+
+model Project {
+  id          String     @id @default(uuid())
+  name        String
+  description String
+  constructor User       @relation(fields: [constructorId], references: [id])
+  constructorId String
+  city        City       @relation(fields: [cityId], references: [id])
+  cityId      String
+  properties  Property[]
+  mainImage   String?
+  images      String[]
+  status      String     @default("PLANNING") // PLANNING, CONSTRUCTION, COMPLETED
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Property {
+  id            String         @id @default(uuid())
+  title         String
+  description   String
+  price         Decimal        @db.Decimal(20, 2)
+  type          PropertyType
+  status        PropertyStatus
+  
+  // Specs
+  area          Float?         // in m2
+  bedrooms      Int?
+  bathrooms     Int?
+  parking       Int?
+  
+  // Location
+  address       String
+  city          City           @relation(fields: [cityId], references: [id])
+  cityId        String
+  lat           Float?
+  lng           Float?
+  
+  // Relations
+  owner         User           @relation(fields: [ownerId], references: [id])
+  ownerId       String
+  category      Category?      @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+  project       Project?       @relation(fields: [projectId], references: [id])
+  projectId     String?
+  
+  // Media
+  mainImage     String
+  images        String[]
+  videoUrl      String?
+  tour3dUrl     String?
+  
+  featured      Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
